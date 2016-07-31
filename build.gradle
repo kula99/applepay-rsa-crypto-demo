@@ -1,0 +1,107 @@
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'java'
+
+javadoc {
+    options.encoding = "UTF-8"
+}
+
+sourceCompatibility = 1.7
+
+def defaultEncoding = 'UTF-8'
+build.dependsOn intTest
+compileJava.dependsOn clean
+compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+[compileJava, compileTestJava]*.options*.encoding = defaultEncoding
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+	intTestCompile {
+		extendsFrom testCompile
+	}
+
+	intTestRuntime{
+		extendsFrom intTestCompile , testRuntime
+	}
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+
+		resources {
+			srcDir 'src/main/resources'
+		}
+	}
+
+	test {
+		java {
+			srcDir 'src/test/java'
+		}
+
+		resources {
+			srcDir 'src/test/resources'
+		}
+	}
+
+
+	
+
+}
+
+clean {
+	delete 'dist'
+	delete 'build'
+}
+
+
+List apache_commons = [
+	"commons-logging:commons-logging:1.2",
+	"org.apache.commons:commons-collections4:4.1",
+	"commons-beanutils:commons-beanutils:1.9.2",
+	//"commons-collections:commons-collections:3.2.2",
+	"org.apache.commons:commons-lang3:3.4",
+	"commons-io:commons-io:2.5",
+	//"commons-lang:commons-lang:2.6",
+	"commons-codec:commons-codec:1.10",
+	"commons-cli:commons-cli:1.3.1"
+]
+
+def logger_version = "2.5"
+List logger = [
+	"org.apache.logging.log4j:log4j-api:$logger_version",
+	"org.apache.logging.log4j:log4j-core:$logger_version",
+	"org.apache.logging.log4j:log4j-slf4j-impl:$logger_version",
+	"org.apache.logging.log4j:log4j-web:$logger_version"
+]
+
+def jackson_version = "2.6.5"
+List jackson = [
+	"com.fasterxml.jackson.core:jackson-core:$jackson_version",
+	"com.fasterxml.jackson.core:jackson-databind:$jackson_version",
+	"com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jackson_version"
+]
+
+List guava = [
+	'com.google.guava:guava:19.0'
+]
+
+List junit = [
+	"junit:junit:4.11"
+]
+
+List bouncycastle = [
+	'org.bouncycastle:bcprov-jdk15on:1.54',
+	'org.bouncycastle:bcmail-jdk15on:1.54'
+]
+
+dependencies {
+	compile apache_commons,logger,jackson,guava,bouncycastle
+	testCompile apache_commons,logger,jackson,guava,bouncycastle,junit
+	runtime apache_commons,logger,jackson,guava,bouncycastle
+}

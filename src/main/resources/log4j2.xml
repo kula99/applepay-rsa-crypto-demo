@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="60">
+	<Appenders>
+		<RollingFile name="fixedTimeFileAppender" fileName="demo.log"
+			filePattern="demo.log.%d{yyyy-MM-dd_HH}-%i.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}(%L) - %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="200 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="1" />
+		</RollingFile>
+
+	</Appenders>
+	<Loggers>
+		<Logger name="com.xavier" level="info" additivity="false" includeLocation="true">
+			<AppenderRef ref="fixedTimeFileAppender" />
+		</Logger>
+
+		<Root level="info" includeLocation="true">
+			<AppenderRef ref="fixedTimeFileAppender" />
+		</Root>
+	</Loggers>
+</Configuration>
